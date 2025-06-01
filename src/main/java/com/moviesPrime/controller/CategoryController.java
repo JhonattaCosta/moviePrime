@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/movieprime/category")
+@RequestMapping("/moviesprime/category")
 @RequiredArgsConstructor
 public class CategoryController {
 
