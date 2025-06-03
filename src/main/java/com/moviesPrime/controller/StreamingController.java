@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/moviesprime/streaming")
@@ -42,8 +43,12 @@ public class StreamingController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStreamId(@PathVariable Long id){
-        streamingService.deleteStreamingId(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        Optional<Streaming> optStreaming = streamingService.findStreamingId(id);
+        if(optStreaming.isPresent()){
+            streamingService.deleteStreamingId(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 
