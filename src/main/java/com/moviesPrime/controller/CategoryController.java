@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/moviesprime/category")
@@ -44,8 +45,12 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoryId(@PathVariable Long id){
-        categoryService.deleteCategoryId(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        Optional<Category> optCategory = categoryService.findCategoryId(id);
+        if(optCategory.isPresent()){
+            categoryService.deleteCategoryId(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 
