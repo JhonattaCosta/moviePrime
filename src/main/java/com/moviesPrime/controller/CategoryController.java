@@ -6,6 +6,7 @@ import com.moviesPrime.controller.response.CategoryResponse;
 import com.moviesPrime.entity.Category;
 import com.moviesPrime.mapper.CategoryMapper;
 import com.moviesPrime.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +38,17 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> saveCategory(@RequestBody CategoryRequest request){
+    public ResponseEntity<CategoryResponse> saveCategory(@Valid @RequestBody CategoryRequest request){
         Category savedCategory = categoryService.saveCategory(CategoryMapper.toCategory(request));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(CategoryMapper.toCategoryResponse(savedCategory));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id,@Valid @RequestBody CategoryRequest request){
+        return categoryService.updateCategory(id, CategoryMapper.toCategory(request))
+                .map(category -> ResponseEntity.ok(CategoryMapper.toCategoryResponse(category)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
