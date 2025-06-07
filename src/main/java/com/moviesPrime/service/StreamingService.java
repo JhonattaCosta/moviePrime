@@ -1,7 +1,9 @@
 package com.moviesPrime.service;
 
+import com.moviesPrime.controller.request.StreamingRequest;
 import com.moviesPrime.entity.Streaming;
 import com.moviesPrime.repository.StreamingRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,18 @@ public class StreamingService {
 
     public Optional<Streaming> findStreamingId(Long id){
         return  repository.findById(id);
+    }
+
+    public Optional<Streaming> updateStreaming(Long id, @Valid Streaming updateStreaming){
+        Optional<Streaming> optStreaming = repository.findById(id);
+        if (optStreaming.isPresent()){
+            Streaming streaming = optStreaming.get();
+            streaming.setName(updateStreaming.getName());
+
+            repository.save(streaming);
+            return Optional.of(streaming);
+        }
+        return Optional.empty();
     }
 
     public void deleteStreamingId(Long id){

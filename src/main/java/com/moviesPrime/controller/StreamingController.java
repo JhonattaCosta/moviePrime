@@ -5,6 +5,7 @@ import com.moviesPrime.controller.response.StreamingResponse;
 import com.moviesPrime.entity.Streaming;
 import com.moviesPrime.mapper.StreamingMapper;
 import com.moviesPrime.service.StreamingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +36,17 @@ public class StreamingController {
     }
 
     @PostMapping
-    public ResponseEntity<StreamingResponse> saveStream(@RequestBody StreamingRequest request){
+    public ResponseEntity<StreamingResponse> saveStream(@Valid @RequestBody StreamingRequest request){
         Streaming savedStream = streamingService.saveStreaming(StreamingMapper.toStreaming(request));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(StreamingMapper.toStreamingResponse(savedStream));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<StreamingResponse> updateStream(@PathVariable Long id,@Valid @RequestBody StreamingRequest request){
+        return streamingService.updateStreaming(id, StreamingMapper.toStreaming(request))
+                .map(streaming -> ResponseEntity.ok(StreamingMapper.toStreamingResponse(streaming)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
