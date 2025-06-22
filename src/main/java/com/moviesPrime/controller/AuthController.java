@@ -9,6 +9,9 @@ import com.moviesPrime.entity.User;
 import com.moviesPrime.exception.UsernameOrPasswordInvalidException;
 import com.moviesPrime.mapper.UserMapper;
 import com.moviesPrime.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +34,22 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
+    @Operation(summary = "Registro de usuario", description = "Registra o usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",description = "Usuario criado"),
+            @ApiResponse(responseCode = "400", description = "Não foi possivel registrar o usuario!")
+    })
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody UserRequest request){
         User savedUser = userService.saveUser(UserMapper.toUser(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toUserResponse(savedUser));
     }
 
+    @Operation(summary = "Login do usuario", description = "Loga o usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario logado"),
+            @ApiResponse(responseCode = "400", description = "Não foi possivel logar tente novamente!")
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
         try{
