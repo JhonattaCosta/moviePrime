@@ -1,6 +1,5 @@
 package com.moviesPrime.service;
 
-import com.moviesPrime.controller.response.MovieResponse;
 import com.moviesPrime.entity.Category;
 import com.moviesPrime.entity.Movie;
 import com.moviesPrime.entity.Streaming;
@@ -9,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -17,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -89,5 +89,36 @@ public class MovieSericeTest {
 
     }
 
+    @Test
+    public void testFindMovieId(){
+        List<Category> categories = Arrays.asList(
+                new Category(1L,"Ação"),
+                new Category(2L, "Sci-fi")
+        );
+        List<Streaming> streamings = Arrays.asList(
+                new Streaming(1L, "Disney+"),
+                new Streaming(2L,"Netflix")
+        );
+        Optional<Movie> moviefake = Optional.of(new Movie(
+                1L,
+                "Star Wars 1",
+                "Guerra nas Estrelas",
+                LocalDate.of(1997, 5, 4),
+                4.5,
+                LocalDateTime.of(2025, 1, 1, 0, 0),
+                LocalDateTime.of(2025, 1, 1, 0, 0),
+                categories,
+                streamings
+        ));
+
+        when(service.findMovieId(1L)).thenReturn(moviefake);
+
+        Optional<Movie> moviefind = service.findMovieId(1L);
+
+        assertTrue(moviefind.isPresent());
+        assertEquals(moviefake, moviefind);
+
+
+    }
 
 }
