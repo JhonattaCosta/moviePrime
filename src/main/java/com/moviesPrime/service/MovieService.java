@@ -20,7 +20,7 @@ public class MovieService {
     private final StreamingService streamingService;
 
     public Movie saveMovie(Movie movie){
-        movie.setCategories(this.findCategoies(movie.getCategories()));
+        movie.setCategories(this.findCategories(movie.getCategories()));
         movie.setStreamings(this.findStreamings(movie.getStreamings()));
         return repository.save(movie);
     }
@@ -29,7 +29,7 @@ public class MovieService {
         return repository.findAll();
     }
 
-    public List<Category> findCategoies(List<Category> categories){
+    public List<Category> findCategories(List<Category> categories){
         List<Category> categoriesFound = new ArrayList<>();
         categories.forEach(category ->
                 categoryService.findCategoryId(category.getId()).ifPresent(categoriesFound::add)
@@ -50,7 +50,7 @@ public class MovieService {
     public Optional<Movie> updateMovieId(Long movieId, Movie updateMovie){
         Optional<Movie> optMovie = repository.findById(movieId);
         if(optMovie.isPresent()){
-            List<Category> categoies = this.findCategoies(updateMovie.getCategories());
+            List<Category> categoies = this.findCategories(updateMovie.getCategories());
             List<Streaming> streamings = this.findStreamings(updateMovie.getStreamings());
 
 
