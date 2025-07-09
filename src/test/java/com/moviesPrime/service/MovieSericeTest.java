@@ -121,4 +121,48 @@ public class MovieSericeTest {
 
     }
 
+    @Test
+    public void testUpdateMovie(){
+        List<Category> categories = Arrays.asList(
+                new Category(1L,"Ação"),
+                new Category(2L, "Sci-fi")
+        );
+        List<Streaming> streamings = Arrays.asList(
+                new Streaming(1L, "Disney+"),
+                new Streaming(2L,"Netflix")
+        );
+
+        Movie existingMovie = new Movie(
+                1L,
+                "Star Wars 1",
+                "Guerra nas Estrelas",
+                LocalDate.of(1997,5,4),
+                4.5,
+                LocalDateTime.of(2025,1,1,0,0),
+                LocalDateTime.of(2025,1,1,0,0),
+                categories,
+                streamings
+        );
+
+        Movie movieUpdated = new Movie(
+                1L,
+                "Star Wars 2",//Unica alteração
+                "Guerra nas Estrelas",
+                LocalDate.of(1997,5,4),
+                4.5,
+                LocalDateTime.of(2025,1,1,0,0),
+                LocalDateTime.of(2025,1,1,0,0),
+                categories,
+                streamings
+        );
+
+        when(service.findMovieId(1L)).thenReturn(Optional.of(existingMovie));
+        when(service.saveMovie(existingMovie)).thenReturn(existingMovie);
+
+        Optional<Movie> result = service.updateMovieId(1L,movieUpdated);
+
+        assertTrue(result.isPresent());
+        assertEquals("Star Wars 2", result.get().getTitle());
+
+    }
 }
