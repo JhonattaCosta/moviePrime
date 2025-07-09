@@ -165,4 +165,31 @@ public class MovieSericeTest {
         assertEquals("Star Wars 2", result.get().getTitle());
 
     }
+
+    @Test
+    public void testDeleteMovie(){
+        List<Category> categories = Arrays.asList(
+                new Category(1L,"Ação"),
+                new Category(2L, "Sci-fi")
+        );
+        List<Streaming> streamings = Arrays.asList(
+                new Streaming(1L, "Disney+"),
+                new Streaming(2L,"Netflix")
+        );
+
+        Movie movieFake = new Movie(
+                1L,
+                "Star Wars 1",
+                "Guerra nas Estrelas",
+                LocalDate.of(1997,5,4),
+                4.5,
+                LocalDateTime.of(2025,1,1,0,0),
+                LocalDateTime.of(2025,1,1,0,0),
+                categories,
+                streamings
+        );
+
+        service.deleteMovieId(1L);
+        verify(repository).deleteById(1L);
+    }
 }
