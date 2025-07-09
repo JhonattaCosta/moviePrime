@@ -54,25 +54,27 @@ public class CategoryServiceTest {
 
     @Test
     public void testFindCategoryId() {
-        Category categoryfake = new Category(1L, "Ação");
+        Optional<Category> categoryfake = Optional.of(new Category(1L, "Ação"));
 
-        Mockito.when(repository.findById(1L)).thenReturn(Optional.of(categoryfake));
+        Mockito.when(repository.findById(1L)).thenReturn(categoryfake);
 
         Optional<Category> findCategoryId = service.findCategoryId(1L);
 
         assertTrue(findCategoryId.isPresent());
-        assertEquals("Ação", findCategoryId.get().getName());
+        assertEquals(categoryfake,findCategoryId);
     }
 
     @Test
     public void testUpdateCategory() {
+        Category existingCategory = new Category(1L, "Ficção");
         Category categoryUpdate = new Category(1L, "Romance");
 
-        Mockito.when(repository.findById(1L)).thenReturn(Optional.of(categoryUpdate));
-        Mockito.when(repository.save(categoryUpdate)).thenReturn(categoryUpdate);
+        Mockito.when(repository.findById(1L)).thenReturn(Optional.of(existingCategory));
+        Mockito.when(repository.save(existingCategory)).thenReturn(existingCategory);
 
         Optional<Category> result = service.updateCategory(1L, categoryUpdate);
 
+        assertTrue(result.isPresent());
         assertEquals("Romance", result.get().getName());
 
     }
